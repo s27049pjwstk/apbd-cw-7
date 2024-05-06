@@ -177,7 +177,9 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<Emp> Task1()
         {
-            IEnumerable<Emp> result = null;
+            IEnumerable<Emp> result = from emp in Emps where emp.Job == "Backend programmer" select emp;
+            IEnumerable<Emp> resultAlt = Emps.Where(emp => emp.Job == "Backend programmer");
+
             return result;
         }
 
@@ -186,7 +188,8 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<Emp> Task2()
         {
-            IEnumerable<Emp> result = null;
+            IEnumerable<Emp> result = Emps.Where(emp => emp.Job == "Frontend programmer" && emp.Salary > 1000)
+                .OrderByDescending(emp => emp.Ename);
             return result;
         }
 
@@ -196,7 +199,7 @@ namespace LinqTutorials
         /// </summary>
         public static int Task3()
         {
-            int result = 0;
+            int result = Emps.Max(emp => emp.Salary);
             return result;
         }
 
@@ -205,7 +208,7 @@ namespace LinqTutorials
         /// </summary>
         public static IEnumerable<Emp> Task4()
         {
-            IEnumerable<Emp> result = null;
+            IEnumerable<Emp> result = Emps.Where(emp => emp.Salary == (Emps.Max(emp => emp.Salary)));
             return result;
         }
 
@@ -323,7 +326,7 @@ namespace LinqTutorials
             //result =
             return result;
         }
-        
+
         /// <summary>
         ///     SELECT Job AS Praca, COUNT(1) LiczbaPracownikow FROM Emps
         ///     WHERE Job LIKE '%A%'
@@ -337,7 +340,7 @@ namespace LinqTutorials
             //result =
             return result;
         }
-        
+
         /// <summary>
         ///     SELECT * FROM Emps, Depts;
         /// </summary>
@@ -354,9 +357,9 @@ namespace LinqTutorials
         //Put your extension methods here
         public static IEnumerable<Emp> GetEmpsWithSubordinates(this IEnumerable<Emp> emps)
         {
-            var result = emps.Where(e => emps.Any(e2 => e2.Mgr == e.Mgr)).OrderBy(e => e.Ename).ThenByDescending(e => e.Salary);
+            var result = emps.Where(e => emps.Any(e2 => e2.Mgr == e.Mgr)).OrderBy(e => e.Ename)
+                .ThenByDescending(e => e.Salary);
             return result;
         }
-
     }
 }
